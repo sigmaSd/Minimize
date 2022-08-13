@@ -75,6 +75,9 @@ def parse(out) -> str:
         permission_type = line.split(" ")[0].strip()
         # remove '.' at the end
         permission = line.split(" ")[1].strip()[:-1]
+
+        # handle builtin permissions
+        permission = permission.replace('<CWD>', '$PWD')
         permission = permission.replace('<', '\<').replace('>', '\>')
         match permission_type:
             case "read":
