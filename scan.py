@@ -2,7 +2,7 @@
 
 from ptyprocess import PtyProcessUnicode
 import sys
-p = PtyProcessUnicode.spawn(["deno","run","--unstable"]+ sys.argv[1:])
+p = PtyProcessUnicode.spawn(["deno", "run", "--unstable"] + sys.argv[1:])
 
 scan = []
 scan.append("#" + sys.argv[1])

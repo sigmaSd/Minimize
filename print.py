@@ -6,6 +6,8 @@ out = open("scan.out", "r").read()
 """
 Create deno permission flag based on the above output
 """
+
+
 class Permission:
     read = []
     write = []
@@ -29,7 +31,6 @@ class Permission:
         return result
 
 
-
 def parse(out) -> str:
     permissions = Permission()
     for line in out.split("\n"):
@@ -38,7 +39,7 @@ def parse(out) -> str:
         permission_type = line.split(" ")[0].strip()
         # remove '.' at the end
         permission = line.split(" ")[1].strip()[:-1]
-        permission = permission.replace('<','\<').replace('>','\>')
+        permission = permission.replace('<', '\<').replace('>', '\>')
         match permission_type:
             case "read":
                 permissions.read.append(permission)
@@ -52,9 +53,7 @@ def parse(out) -> str:
                 permissions.write.append(permission)
 
     return permissions.toDeno()
-    
-
 
 
 argv = out.split("\n")[0][1:]
-print("deno run --unstable " +  parse(out) + argv)
+print("deno run --unstable " + parse(out) + argv)
