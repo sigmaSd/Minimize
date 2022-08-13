@@ -15,3 +15,7 @@ Replace deno `-A` with the actual used flags
 - Record every permission that was asked for in `/tmp/scan.out`
 - Parses `scan.out` into a deno cli format, for example:
   `deno run --unstable --allow-read=.. --allow-write=.. deno_file.ts`
+
+## Why in python
+
+Waiting for https://github.com/denoland/deno/issues/3994
