@@ -5,9 +5,6 @@ import sys
 import os
 
 file = sys.argv[1]
-# change cwd to file cwd
-cwd = file.rsplit('/', 1)[0]
-os.chdir(cwd)
 
 p = PtyProcessUnicode.spawn(["deno", "run", "--unstable", file])
 
