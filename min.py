@@ -27,7 +27,7 @@ try:
             scan.append(permission_type + ' ' + permission)
             p.write('y\n')
 except KeyboardInterrupt:
-    pass
+    print("")
 
 with open('/tmp/scan.out', 'w') as f:
     f.write('\n'.join(scan))
