@@ -20,7 +20,9 @@ try:
         except EOFError:
             break
 
-        print(line)
+        # if env NO_OUTPUT is set, don't print anything
+        if os.getenv("NO_OUTPUT") is None:
+            print(line)
 
         if '⚠️ ' in line:
             permission_type = line.split(' ')[4]
