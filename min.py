@@ -50,6 +50,7 @@ class Permission:
     net = []
     run = []
     env = []
+    ffi = []
 
     def toDeno(self):
         result = ""
@@ -63,6 +64,8 @@ class Permission:
             result += "--allow-run=" + ",".join(self.run) + " "
         if len(self.env) > 0:
             result += "--allow-env=" + ",".join(self.env) + " "
+        if len(self.ffi) > 0:
+            result += "--allow-ffi=" + ",".join(self.ffi) + " "
 
         return result
 
@@ -90,6 +93,8 @@ def parse(out) -> str:
                 permissions.env.append(permission)
             case "write":
                 permissions.write.append(permission)
+            case "ffi":
+                permissions.ffi.append(permission)
 
     return permissions.toDeno()
 
