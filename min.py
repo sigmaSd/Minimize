@@ -3,6 +3,7 @@
 from ptyprocess import PtyProcessUnicode
 import sys
 import os
+import subprocess
 
 file = sys.argv[1]
 
@@ -80,21 +81,33 @@ def parse(out) -> str:
         permission = line.split(" ")[1].strip()[:-1]
 
         # handle builtin permissions
-        permission = permission.replace('<CWD>', '$PWD')
-        permission = permission.replace('<', '\<').replace('>', '\>')
+        if permission == '<CWD>':
+            permission = permission.replace('<CWD>', '$PWD')
+        if permission == '<exec_path>':
+            permission = permission.replace('<exec_path>',
+                                            subprocess.check_output(['deno', 'eval', 'console.log(Deno.execPath())']).decode("utf-8").strip())
+        if permission.startswith('<'):
+            permission = permission.replace('<', '\\<').replace('>', '\\>')
+
         match permission_type:
             case "read":
-                permissions.read.append(permission)
-            case "net":
-                permissions.net.append(permission)
-            case "run":
-                permissions.run.append(permission)
-            case "env":
-                permissions.env.append(permission)
+                if permission not in permissions.read:
+                    permissions.read.append(permission)
             case "write":
-                permissions.write.append(permission)
+                if permission not in permissions.write:
+                    permissions.write.append(permission)
+            case "net":
+                if permission not in permissions.net:
+                    permissions.net.append(permission)
+            case "run":
+                if permission not in permissions.run:
+                    permissions.run.append(permission)
+            case "env":
+                if permission not in permissions.env:
+                    permissions.env.append(permission)
             case "ffi":
-                permissions.ffi.append(permission)
+                if permission not in permissions.ffi:
+                    permissions.ffi.append(permission)
 
     return permissions.toDeno()
 
