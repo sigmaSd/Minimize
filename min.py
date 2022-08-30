@@ -5,12 +5,10 @@ import sys
 import os
 import subprocess
 
-file = sys.argv[1]
-
-p = PtyProcessUnicode.spawn(["deno", "run", "--unstable", file])
+p = PtyProcessUnicode.spawn(["deno", "run"] + sys.argv[1:])
 
 scan = []
-scan.append("#" + file)
+scan.append("#" + sys.argv[1])
 try:
     while True:
         try:
