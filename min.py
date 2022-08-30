@@ -5,6 +5,10 @@ import sys
 import os
 import subprocess
 
+import sys
+if sys.version_info < (3, 10, 0):
+    raise Exception("minimize requires python >= 3.10 version")
+
 p = PtyProcessUnicode.spawn(["deno", "run"] + sys.argv[1:])
 
 scan = []
