@@ -10,7 +10,7 @@ Replace deno `-A` with the actual used flags
 
 ## How it works
 
-- It runs the file with `deno run --unstable`
+- It runs the file with `deno run`
 - Says yes to every prompt
 - Record every permission that was asked for in `/tmp/scan.out`
 - Parses `scan.out` into a deno cli format, for example:
