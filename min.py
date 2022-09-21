@@ -115,4 +115,4 @@ def parse(out) -> str:
 
 
 argv = out.split("\n")[0][1:]
-print("deno run --unstable " + parse(out) + argv)
+print("deno run " + parse(out) + argv)
