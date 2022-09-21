@@ -55,19 +55,34 @@ class Permission:
     env = []
     ffi = []
 
+    def allow_all(self, permission):
+        return "all" in permission
+
     def toDeno(self):
         result = ""
-        if len(self.read) > 0:
+        if self.allow_all(self.read):
+            result += "--allow-read "
+        elif len(self.read) > 0:
             result += "--allow-read=" + ",".join(self.read) + " "
-        if len(self.write) > 0:
+        if self.allow_all(self.write):
+            result += "--allow-write "
+        elif len(self.write) > 0:
             result += "--allow-write=" + ",".join(self.write) + " "
-        if len(self.net) > 0:
+        if self.allow_all(self.net):
+            result += "--allow-net "
+        elif len(self.net) > 0:
             result += "--allow-net=" + ",".join(self.net) + " "
-        if len(self.run) > 0:
+        if self.allow_all(self.run):
+            result += "--allow-run "
+        elif len(self.run) > 0:
             result += "--allow-run=" + ",".join(self.run) + " "
-        if len(self.env) > 0:
+        if self.allow_all(self.env):
+            result += "--allow-env "
+        elif len(self.env) > 0:
             result += "--allow-env=" + ",".join(self.env) + " "
-        if len(self.ffi) > 0:
+        if self.allow_all(self.ffi):
+            result += "--allow-ffi "
+        elif len(self.ffi) > 0:
             result += "--allow-ffi=" + ",".join(self.ffi) + " "
 
         return result
