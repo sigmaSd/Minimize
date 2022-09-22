@@ -2,6 +2,11 @@
 
 Replace deno `-A` with the actual used flags
 
+## Dependencies
+
+- `pip install semver`
+- `pip install ptyprocess`
+
 ## Usage
 
 `./min.py deno_file.ts`

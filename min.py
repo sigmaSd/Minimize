@@ -1,18 +1,52 @@
 #!/bin/python3
 
-from ptyprocess import PtyProcessUnicode
 import sys
 import os
 import subprocess
-
+import re
 import sys
+import semver
+from ptyprocess import PtyProcessUnicode
+
 if sys.version_info < (3, 10, 0):
     raise Exception("minimize requires python >= 3.10 version")
+
+
+def sanitize(s):
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    return ansi_escape.sub('', s).replace('"', '')
+
 
 p = PtyProcessUnicode.spawn(["deno", "run"] + sys.argv[1:])
 
 scan = []
 scan.append("#" + sys.argv[1])
+
+deno_version = subprocess.check_output(
+    ["deno", "--version"]).decode("utf-8").splitlines()[0]
+# consider canary like latest parsing method
+is_canary = semver.VersionInfo.parse(deno_version.split()[1]).build != ""
+is_gte_1_25_4 = semver.compare(deno_version.split()[1], "1.25.4") >= 0
+
+
+def parse_line(line):
+    if is_canary or is_gte_1_25_4:
+        if 'access' in line:
+            line_split = line.split()
+            mark = line_split.index("access")
+            permission_type = sanitize(line_split[mark - 1])
+            permission = sanitize(line_split[mark + 2])
+            scan.append(permission_type + ' ' + permission)
+        if 'Allow?' in line:
+            p.write('y\n')
+    else:
+        if '⚠️ ' in line:
+            permission_type = line.split()[4]
+            permission = line.split()[7]
+            scan.append(permission_type + ' ' + permission)
+            p.write('y\n')
+
+
 try:
     while True:
         try:
@@ -24,11 +58,7 @@ try:
         if os.getenv("NO_OUTPUT") is None:
             print(line)
 
-        if '⚠️ ' in line:
-            permission_type = line.split(' ')[4]
-            permission = line.split(' ')[7]
-            scan.append(permission_type + ' ' + permission)
-            p.write('y\n')
+        parse_line(line)
 except KeyboardInterrupt:
     print("")
 
@@ -94,8 +124,10 @@ def parse(out) -> str:
         if not line or line.startswith("#"):
             continue
         permission_type = line.split(" ")[0].strip()
+        permission = line.split(" ")[1].strip()
         # remove '.' at the end
-        permission = line.split(" ")[1].strip()[:-1]
+        if permission.endswith("."):
+            permission = permission[:-1]
 
         # handle builtin permissions
         if permission == '<CWD>':
