@@ -26,11 +26,11 @@ deno_version = subprocess.check_output(
     ["deno", "--version"]).decode("utf-8").splitlines()[0]
 # consider canary like latest parsing method
 is_canary = semver.VersionInfo.parse(deno_version.split()[1]).build != ""
-is_gte_1_25_4 = semver.compare(deno_version.split()[1], "1.25.4") >= 0
+is_gte_1_25_5 = semver.compare(deno_version.split()[1], "1.25.5") >= 0
 
 
 def parse_line(line):
-    if is_canary or is_gte_1_25_4:
+    if is_canary or is_gte_1_25_5:
         if 'access' in line:
             line_split = line.split()
             mark = line_split.index("access")
