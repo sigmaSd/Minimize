@@ -131,7 +131,7 @@ def parse(out) -> str:
 
         # handle builtin permissions
         if permission == '<CWD>':
-            permission = permission.replace('<CWD>', '$PWD')
+            permission = permission.replace('<CWD>', '.')
         if permission == '<exec_path>':
             permission = permission.replace('<exec_path>',
                                             subprocess.check_output(['deno', 'eval', 'console.log(Deno.execPath())']).decode("utf-8").strip())
