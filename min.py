@@ -84,6 +84,7 @@ class Permission:
     run = []
     env = []
     ffi = []
+    sys = []
 
     def allow_all(self, permission):
         return "all" in permission
@@ -114,6 +115,10 @@ class Permission:
             result += "--allow-ffi "
         elif len(self.ffi) > 0:
             result += "--allow-ffi=" + ",".join(self.ffi) + " "
+        if self.allow_all(self.sys):
+            result += "--allow-sys "
+        elif len(self.sys) > 0:
+            result += "--allow-sys=" + ",".join(self.sys) + " "
 
         return result
 
@@ -157,6 +162,9 @@ def parse(out) -> str:
             case "ffi":
                 if permission not in permissions.ffi:
                     permissions.ffi.append(permission)
+            case "sys":
+                if permission not in permissions.sys:
+                    permissions.sys.append(permission)
 
     return permissions.toDeno()
 
