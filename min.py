@@ -20,7 +20,7 @@ def sanitize(s):
 p = PtyProcessUnicode.spawn(["deno", "run"] + sys.argv[1:])
 
 scan = []
-scan.append("#" + sys.argv[1])
+scan.append("#" +  " ".join(sys.argv[1:]))
 
 deno_version = subprocess.check_output(
     ["deno", "--version"]).decode("utf-8").splitlines()[0]
