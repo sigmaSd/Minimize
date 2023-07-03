@@ -24,3 +24,7 @@ Replace deno `-A` with the actual used flags
 ## Why in python
 
 Waiting for https://github.com/denoland/deno/issues/3994
+
+**Update:**
+
+There is a deno version now: https://github.com/sigmaSd/Minimize-Deno
